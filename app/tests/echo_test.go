@@ -27,6 +27,37 @@ func TestEcho_ReturnsBody(t *testing.T) {
 	}
 }
 
+func TestEcho_PreservesExactBody(t *testing.T) {
+	engine := setupRouter()
+
+	rawJSON := `{"message":"hello","number":42,"nested":{"key":"val"}}`
+	w := doRawRequest(engine, http.MethodPost, "/echo", rawJSON, "")
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", w.Code)
+	}
+
+	got := w.Body.String()
+	if got != rawJSON {
+		t.Errorf("expected body to be echoed exactly\nwant: %s\ngot:  %s", rawJSON, got)
+	}
+}
+
+func TestEcho_EmptyObject(t *testing.T) {
+	engine := setupRouter()
+
+	w := doRawRequest(engine, http.MethodPost, "/echo", "{}", "")
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("expected status 200, got %d", w.Code)
+	}
+
+	got := w.Body.String()
+	if got != "{}" {
+		t.Errorf("expected '{}', got '%s'", got)
+	}
+}
+
 func TestEcho_InvalidJSON(t *testing.T) {
 	engine := setupRouter()
 
