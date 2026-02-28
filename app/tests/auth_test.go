@@ -43,11 +43,33 @@ func TestAuth_MissingCredentials(t *testing.T) {
 }
 
 func TestAuth_ProtectedWithoutToken(t *testing.T) {
-	t.Skip("auth middleware temporarily disabled")
+	engine := setupRouter()
+
+	w := doRequest(engine, http.MethodGet, "/books", nil, "")
+
+	if w.Code != http.StatusUnauthorized {
+		t.Fatalf("expected status 401, got %d", w.Code)
+	}
+
+	body := parseJSON(t, w)
+	if body["error"] != "UNAUTHORIZED" {
+		t.Errorf("expected error 'UNAUTHORIZED', got %v", body["error"])
+	}
 }
 
 func TestAuth_ProtectedWithInvalidToken(t *testing.T) {
-	t.Skip("auth middleware temporarily disabled")
+	engine := setupRouter()
+
+	w := doRequest(engine, http.MethodGet, "/books", nil, "invalid-token")
+
+	if w.Code != http.StatusUnauthorized {
+		t.Fatalf("expected status 401, got %d", w.Code)
+	}
+
+	body := parseJSON(t, w)
+	if body["error"] != "UNAUTHORIZED" {
+		t.Errorf("expected error 'UNAUTHORIZED', got %v", body["error"])
+	}
 }
 
 func TestAuth_WrongCredentials(t *testing.T) {

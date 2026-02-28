@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/kidboy-man/8-level-desent/app/controllers/middlewares"
 	"github.com/kidboy-man/8-level-desent/app/services"
 )
 
@@ -37,9 +38,13 @@ func (r *Router) Setup() {
 	r.engine.POST("/echo", r.echoController.Echo)
 	r.engine.POST("/auth/token", r.authController.GenerateToken)
 
-	r.engine.POST("/books", r.bookController.Create)
-	r.engine.GET("/books", r.bookController.GetAll)
-	r.engine.GET("/books/:id", r.bookController.GetByID)
-	r.engine.PUT("/books/:id", r.bookController.Update)
-	r.engine.DELETE("/books/:id", r.bookController.Delete)
+	protected := r.engine.Group("/")
+	protected.Use(middlewares.AuthMiddleware(r.authService))
+	{
+		protected.POST("/books", r.bookController.Create)
+		protected.GET("/books", r.bookController.GetAll)
+		protected.GET("/books/:id", r.bookController.GetByID)
+		protected.PUT("/books/:id", r.bookController.Update)
+		protected.DELETE("/books/:id", r.bookController.Delete)
+	}
 }
