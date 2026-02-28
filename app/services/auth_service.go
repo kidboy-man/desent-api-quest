@@ -21,6 +21,10 @@ func (s *AuthService) GenerateToken(username, password string) (string, error) {
 		return "", apperrors.NewBadRequest("username and password are required")
 	}
 
+	if username != "admin" || password != "password" {
+		return "", apperrors.NewUnauthorized("invalid credentials")
+	}
+
 	claims := jwt.MapClaims{
 		"sub": username,
 		"iat": time.Now().Unix(),
