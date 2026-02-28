@@ -38,7 +38,7 @@ func (r *BookRepository) FindAll(filter repositories.BookFilter) ([]*models.Book
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
-	var filtered []*models.Book
+	filtered := make([]*models.Book, 0)
 	for _, id := range r.order {
 		book, exists := r.store[id]
 		if !exists {
