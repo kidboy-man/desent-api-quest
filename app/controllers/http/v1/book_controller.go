@@ -52,16 +52,12 @@ func (ctrl *BookController) GetAll(c *gin.Context) {
 		}
 	}
 
-	books, total, err := ctrl.bookService.GetAllBooks(filter)
+	books, _, err := ctrl.bookService.GetAllBooks(filter)
 	if err != nil {
 		httputil.ReturnError(c, err)
 		return
 	}
 
-	if filter.Page > 0 && filter.Limit > 0 {
-		httputil.ReturnSuccessWithPagination(c, http.StatusOK, books, total, filter.Page, filter.Limit)
-		return
-	}
 	httputil.ReturnSuccess(c, http.StatusOK, books)
 }
 

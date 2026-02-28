@@ -152,26 +152,15 @@ func TestPaginateBooks(t *testing.T) {
 		t.Fatalf("expected status 200, got %d", w.Code)
 	}
 
-	body := parseJSON(t, w)
-	data := body["data"].([]interface{})
-	if len(data) != 2 {
-		t.Errorf("expected 2 books on page 1, got %d", len(data))
-	}
-	if body["total"] != 3.0 {
-		t.Errorf("expected total 3, got %v", body["total"])
-	}
-	if body["page"] != 1.0 {
-		t.Errorf("expected page 1, got %v", body["page"])
-	}
-	if body["limit"] != 2.0 {
-		t.Errorf("expected limit 2, got %v", body["limit"])
+	page1 := parseJSONArray(t, w)
+	if len(page1) != 2 {
+		t.Errorf("expected 2 books on page 1, got %d", len(page1))
 	}
 
 	w = doRequest(engine, http.MethodGet, "/books?page=2&limit=2", nil, token)
-	body = parseJSON(t, w)
-	data = body["data"].([]interface{})
-	if len(data) != 1 {
-		t.Errorf("expected 1 book on page 2, got %d", len(data))
+	page2 := parseJSONArray(t, w)
+	if len(page2) != 1 {
+		t.Errorf("expected 1 book on page 2, got %d", len(page2))
 	}
 }
 
