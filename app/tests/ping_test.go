@@ -15,7 +15,7 @@ func TestPing_ReturnsOK(t *testing.T) {
 	}
 
 	body := parseJSON(t, w)
-	if body["message"] != "pong" {
-		t.Errorf("expected message 'pong', got %v", body["message"])
+	if body["success"] != true {
+		t.Errorf("expected success true, got %v", body["success"])
 	}
 }

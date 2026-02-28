@@ -75,6 +75,15 @@ func parseJSON(t *testing.T, w *httptest.ResponseRecorder) map[string]interface{
 	return result
 }
 
+func parseJSONArray(t *testing.T, w *httptest.ResponseRecorder) []interface{} {
+	t.Helper()
+	var result []interface{}
+	if err := json.Unmarshal(w.Body.Bytes(), &result); err != nil {
+		t.Fatalf("failed to parse response JSON array: %v, body: %s", err, w.Body.String())
+	}
+	return result
+}
+
 func getToken(t *testing.T, engine *gin.Engine) string {
 	t.Helper()
 	w := doRequest(engine, http.MethodPost, "/auth/token", map[string]string{

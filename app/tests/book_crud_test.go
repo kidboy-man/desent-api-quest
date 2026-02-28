@@ -39,16 +39,9 @@ func TestGetAllBooks(t *testing.T) {
 		t.Fatalf("expected status 200, got %d", w.Code)
 	}
 
-	body := parseJSON(t, w)
-	data, ok := body["data"].([]interface{})
-	if !ok {
-		t.Fatal("expected data to be an array")
-	}
+	data := parseJSONArray(t, w)
 	if len(data) != 2 {
 		t.Errorf("expected 2 books, got %d", len(data))
-	}
-	if body["total"] != 2.0 {
-		t.Errorf("expected total 2, got %v", body["total"])
 	}
 }
 
@@ -139,13 +132,9 @@ func TestSearchBooksByAuthor(t *testing.T) {
 		t.Fatalf("expected status 200, got %d", w.Code)
 	}
 
-	body := parseJSON(t, w)
-	data := body["data"].([]interface{})
+	data := parseJSONArray(t, w)
 	if len(data) != 2 {
 		t.Errorf("expected 2 books by Alan Donovan, got %d", len(data))
-	}
-	if body["total"] != 2.0 {
-		t.Errorf("expected total 2, got %v", body["total"])
 	}
 }
 

@@ -58,7 +58,11 @@ func (ctrl *BookController) GetAll(c *gin.Context) {
 		return
 	}
 
-	httputil.ReturnSuccessWithPagination(c, http.StatusOK, books, total, filter.Page, filter.Limit)
+	if filter.Page > 0 && filter.Limit > 0 {
+		httputil.ReturnSuccessWithPagination(c, http.StatusOK, books, total, filter.Page, filter.Limit)
+		return
+	}
+	httputil.ReturnSuccess(c, http.StatusOK, books)
 }
 
 func (ctrl *BookController) GetByID(c *gin.Context) {
