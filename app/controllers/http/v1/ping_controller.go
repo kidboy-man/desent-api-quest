@@ -14,5 +14,5 @@ func NewPingController() *PingController {
 }
 
 func (ctrl *PingController) Ping(c *gin.Context) {
-	httputil.ReturnSuccess(c, http.StatusOK, gin.H{"message": "pong"})
+	httputil.ReturnSuccess(c, http.StatusOK, gin.H{"success": true})
 }
